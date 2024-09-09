@@ -36,7 +36,6 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        // API endpoint'lerini tanımlayın
         app.MapControllers();
 
         app.Run();
