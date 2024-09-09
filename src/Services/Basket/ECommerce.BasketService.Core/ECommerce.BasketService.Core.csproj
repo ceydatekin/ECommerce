@@ -8,8 +8,10 @@
 
     <ItemGroup>
       <Folder Include="DTOs\" />
-      <Folder Include="Entities\" />
-      <Folder Include="Interfaces\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EditorConfigFiles Include=".editorconfig" />
     </ItemGroup>
 
 </Project>

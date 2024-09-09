@@ -8,12 +8,17 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
+        <PackageReference Include="StackExchange.Redis" Version="2.8.14" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-      <Folder Include="Services\" />
+      <EditorConfigFiles Include=".editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ECommerce.BasketService.Core\ECommerce.BasketService.Core.csproj" />
+      <ProjectReference Include="..\ECommerce.BasketService.Infrastructure\ECommerce.BasketService.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

@@ -124,4 +124,19 @@ public class ProductsController(IProductService productService) : ControllerBase
 
         return NotFound();
     }
+
+    [HttpGet("{id}/Availability")]
+    public async Task<IActionResult> CheckAvailability(string id, [FromQuery] int quantity)
+    {
+        var product = await productService.GetProductByIdAsync(id);
+
+        if (product == null)
+        {
+            return NotFound("Ürün bulunamadı.");
+        }
+
+        var isAvailable = product.StockQuantity >= quantity;
+
+        return Ok(new ProductAvailabilityDto { IsAvailable = isAvailable, Price = product.Price });
+    }
 }

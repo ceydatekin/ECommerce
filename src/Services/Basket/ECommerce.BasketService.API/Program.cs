@@ -1,3 +1,7 @@
+using ECommerce.BasketService.Core.Interfaces;
+using ECommerce.BasketService.Infrastructure.Data;
+using StackExchange.Redis;
+
 namespace ECommerce.BasketService.API;
 
 public class Program
@@ -6,11 +10,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddAuthorization();
+        // Redis Configuration
+        builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+                                                                  ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
 
+        builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+        builder.Services.AddScoped<IBasketService, Services.BasketService>();
+
+        builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddControllers();
 
         var app = builder.Build();
 
@@ -21,7 +30,6 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
         app.MapControllers();
 
