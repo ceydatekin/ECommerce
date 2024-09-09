@@ -28,7 +28,13 @@ public class Program
         });
         builder.Services.AddControllers();
 
+
         var app = builder.Build();
+
+        app.UseCors(builder =>
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader());
 
         if (app.Environment.IsDevelopment())
         {

@@ -10,8 +10,4 @@
       <Folder Include="DTOs\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <EditorConfigFiles Include=".editorconfig" />
-    </ItemGroup>
-
 </Project>

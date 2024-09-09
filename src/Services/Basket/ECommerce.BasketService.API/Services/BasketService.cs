@@ -38,7 +38,7 @@ public class BasketService : IBasketService
     {
         await _basketRepository.ClearBasketAsync(userId);
     }
-    public async Task<(bool Success, string Message)> AddToCartAsync(string userId, BasketItem item)
+  /*  public async Task<(bool Success, string Message)> AddToCartAsync(string userId, BasketItem item)
     {
         var (isAvailable, price) = await CheckProductAvailabilityAsync(item.ProductId, item.Quantity);//TODO API Request
 
@@ -64,5 +64,5 @@ public class BasketService : IBasketService
         item.Price = price; // Güncel fiyatı kullan
         await _basketRepository.UpdateBasketItemAsync(userId, item);
         return (true, "Sepet güncellendi.");
-    }
+    }*/
 }

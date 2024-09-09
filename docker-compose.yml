@@ -9,5 +9,35 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  ecommerce.basketservice.api:
+    build:
+      context: .
+      dockerfile: src/Services/Basket/ECommerce.BasketService.API/Dockerfile
+    image: ecommerce.basketservice.api
+    depends_on:
+      - redis
+    environment:
+      - Redis__Configuration=redis:6379
+    ports:
+      - "5000:80"
+
+  ecommerce.productservice.api:
+    image: ecommerce.productservice.api
+    build:
+      context: .
+      dockerfile: src/Services/ProductService/ECommerce.ProductService.API/Dockerfile
+    ports:
+      - "5248:80"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/ecommerce
+    depends_on:
+      - mongo
+
 volumes:
   mongo_data:

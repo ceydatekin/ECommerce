@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,12 +14,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EditorConfigFiles Include=".editorconfig" />
+      <ProjectReference Include="..\ECommerce.BasketService.Core\ECommerce.BasketService.Core.csproj" />
+      <ProjectReference Include="..\ECommerce.BasketService.Infrastructure\ECommerce.BasketService.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ECommerce.BasketService.Core\ECommerce.BasketService.Core.csproj" />
-      <ProjectReference Include="..\ECommerce.BasketService.Infrastructure\ECommerce.BasketService.Infrastructure.csproj" />
+      <Content Include="..\..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

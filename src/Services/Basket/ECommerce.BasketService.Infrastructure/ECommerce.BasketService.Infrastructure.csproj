@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EditorConfigFiles Include=".editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ECommerce.BasketService.Core\ECommerce.BasketService.Core.csproj" />
     </ItemGroup>
 
