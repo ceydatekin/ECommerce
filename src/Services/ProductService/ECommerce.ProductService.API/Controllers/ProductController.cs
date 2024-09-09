@@ -44,7 +44,10 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> Update(string id, [FromBody] Product product)
     {
         if (!await _productService.ProductExistsAsync(id))
+        {
             return NotFound();
+        }
+
         await _productService.UpdateProductAsync(id, product);
         return NoContent();
     }
@@ -53,7 +56,10 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> Delete(string id)
     {
         if (!await _productService.ProductExistsAsync(id))
+        {
             return NotFound();
+        }
+
         await _productService.DeleteProductAsync(id);
         return NoContent();
     }
