@@ -1,3 +1,5 @@
+using ECommerce.ProductService.Core.Interfaces;
+using ECommerce.ProductService.Infrastructure.Data;
 using MongoDB.Driver;
 
 namespace ECommerce.ProductService.API;
@@ -12,7 +14,9 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IProductService, Services.ProductService>();
+
         var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 
         builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoConnectionString));
@@ -23,7 +27,7 @@ public class Program
             return client.GetDatabase("Product");
         });
         builder.Services.AddControllers();
-        
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -33,7 +37,7 @@ public class Program
         }
 
         // API endpoint'lerini tanımlayın
-        app.MapControllers(); 
+        app.MapControllers();
 
         app.Run();
     }

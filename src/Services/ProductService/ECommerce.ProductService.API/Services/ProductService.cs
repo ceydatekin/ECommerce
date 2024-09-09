@@ -1,4 +1,5 @@
-﻿using ECommerce.ProductService.Core.Entities;
+﻿using ECommerce.ProductService.Core.DTOs;
+using ECommerce.ProductService.Core.Entities;
 using ECommerce.ProductService.Core.Interfaces;
 
 namespace ECommerce.ProductService.API.Services;
@@ -27,16 +28,26 @@ public class ProductService : IProductService
         return await _productRepository.GetByCategoryAsync(category);
     }
 
-    public async Task<Product> CreateProductAsync(Product product)
+    public async Task<Product> CreateProductAsync(ProductCreateDto productDto)
     {
-        // Burada ürün doğrulama işlemleri yapılabilir
+        var product = new Product
+        {
+            Name = productDto.Name,
+            Description = productDto.Description,
+            Price = productDto.Price,
+            StockQuantity = productDto.StockQuantity,
+            Category = productDto.Category,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
         return await _productRepository.AddAsync(product);
     }
 
-    public async Task UpdateProductAsync(string id, Product product)
+    public async Task<bool> UpdateProductAsync(Product product)
     {
-        // Burada ürün doğrulama işlemleri yapılabilir
-        await _productRepository.UpdateAsync(id, product);
+        var updateResult = await _productRepository.UpdateProductAsync(product);
+        return updateResult.ModifiedCount > 0;
     }
 
     public async Task DeleteProductAsync(string id)
@@ -57,5 +68,17 @@ public class ProductService : IProductService
     public async Task<IEnumerable<Product>> GetPaginatedProductsAsync(int pageNumber, int pageSize)
     {
         return await _productRepository.GetPaginatedAsync(pageNumber, pageSize);
+    }
+
+    public async Task<int?> GetStockQuantityByIdAsync(string id)
+    {
+        var product = await _productRepository.GetByIdStockQuantityAsync(id);
+        return product?.StockQuantity;
+    }
+
+    public async Task<bool> UpdateStockQuantityAsync(string id, int stockQuantity)
+    {
+        var updateResult = await _productRepository.UpdateStockQuantityAsync(id, stockQuantity);
+        return updateResult.ModifiedCount > 0;
     }
 }

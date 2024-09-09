@@ -24,9 +24,6 @@ public class Product
     [BsonElement("Category")]
     public string Category { get; set; }
 
-    [BsonElement("ImageUrl")]
-    public string ImageUrl { get; set; }
-
     [BsonElement("CreatedAt")]
     public DateTime CreatedAt { get; set; }
 
