@@ -5,12 +5,12 @@ namespace ECommerce.BasketService.Core.Interfaces;
 public interface IBasketService
 {
     Task<Basket> GetBasketAsync(string userId);
-
-    Task AddToBasketAsync(string userId, BasketItem item);
-
-    Task UpdateBasketItemAsync(string userId, BasketItem item);
-
+    
     Task RemoveFromBasketAsync(string userId, string productId);
 
     Task ClearBasketAsync(string userId);
+    
+    Task<(bool Success, string Message)> AddToBasketItemAsync(string userId, BasketItem item);
+
+    Task<(bool Success, string Message)> UpdateBasketAsync(string userId, BasketItem item);
 }

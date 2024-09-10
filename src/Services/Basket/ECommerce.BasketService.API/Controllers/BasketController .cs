@@ -23,22 +23,6 @@ public class BasketController : ControllerBase
         return Ok(cart);
     }
 
-    [HttpPost("{userId}/items")]
-    public async Task<IActionResult> AddToCart(string userId, [FromBody] BasketItem item)
-    {
-        await _basketService.AddToBasketAsync(userId, item);
-
-        return Ok();
-    }
-
-    [HttpPut("{userId}/items")]
-    public async Task<IActionResult> UpdateCartItem(string userId, [FromBody] BasketItem item)
-    {
-        await _basketService.UpdateBasketItemAsync(userId, item);
-
-        return Ok();
-    }
-
     [HttpDelete("{userId}/items/{productId}")]
     public async Task<IActionResult> RemoveFromCart(string userId, string productId)
     {
@@ -53,5 +37,29 @@ public class BasketController : ControllerBase
         await _basketService.ClearBasketAsync(userId);
 
         return Ok();
+    }
+
+    [HttpPost("{userId}/Items")]
+    public async Task<IActionResult> AddToBasket(string userId, [FromBody] BasketItem item)
+    {
+        var (success, message) = await _basketService.AddToBasketItemAsync(userId, item);
+        if (success)
+        {
+            return Ok(message);
+        }
+
+        return BadRequest(message);
+    }
+
+    [HttpPut("{userId}/Items")]
+    public async Task<IActionResult> UpdateBasket(string userId, [FromBody] BasketItem item)
+    {
+        var (success, message) = await _basketService.UpdateBasketAsync(userId, item);
+        if (success)
+        {
+            return Ok(message);
+        }
+
+        return BadRequest(message);
     }
 }
