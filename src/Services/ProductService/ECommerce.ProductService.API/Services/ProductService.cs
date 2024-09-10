@@ -1,31 +1,27 @@
 ﻿using ECommerce.ProductService.Core.DTOs;
 using ECommerce.ProductService.Core.Entities;
 using ECommerce.ProductService.Core.Interfaces;
+using ECommerce.Service;
+using MassTransit;
 
 namespace ECommerce.ProductService.API.Services;
 
-public class ProductService : IProductService
+public class ProductService(IProductRepository productRepository, IPublishEndpoint publishEndpoint)
+    : IProductService
 {
-    private readonly IProductRepository _productRepository;
-
-    public ProductService(IProductRepository productRepository)
-    {
-        _productRepository = productRepository;
-    }
-
     public async Task<IEnumerable<Product>> GetAllProductsAsync()
     {
-        return await _productRepository.GetAllAsync();
+        return await productRepository.GetAllAsync();
     }
 
     public async Task<Product> GetProductByIdAsync(string id)
     {
-        return await _productRepository.GetByIdAsync(id);
+        return await productRepository.GetByIdAsync(id);
     }
 
     public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(string category)
     {
-        return await _productRepository.GetByCategoryAsync(category);
+        return await productRepository.GetByCategoryAsync(category);
     }
 
     public async Task<Product> CreateProductAsync(ProductCreateDto productDto)
@@ -41,44 +37,59 @@ public class ProductService : IProductService
             UpdatedAt = DateTime.UtcNow
         };
 
-        return await _productRepository.AddAsync(product);
+        return await productRepository.AddAsync(product);
     }
 
     public async Task<bool> UpdateProductAsync(Product product)
     {
-        var updateResult = await _productRepository.UpdateProductAsync(product);
+        var updateResult = await productRepository.UpdateProductAsync(product);
+
         return updateResult.ModifiedCount > 0;
     }
 
     public async Task DeleteProductAsync(string id)
     {
-        await _productRepository.DeleteAsync(id);
+        await productRepository.DeleteAsync(id);
     }
 
     public async Task<bool> ProductExistsAsync(string id)
     {
-        return await _productRepository.ExistsAsync(id);
+        return await productRepository.ExistsAsync(id);
     }
 
     public async Task<long> GetProductCountAsync()
     {
-        return await _productRepository.GetCountAsync();
+        return await productRepository.GetCountAsync();
     }
 
     public async Task<IEnumerable<Product>> GetPaginatedProductsAsync(int pageNumber, int pageSize)
     {
-        return await _productRepository.GetPaginatedAsync(pageNumber, pageSize);
+        return await productRepository.GetPaginatedAsync(pageNumber, pageSize);
     }
 
     public async Task<int?> GetStockQuantityByIdAsync(string id)
     {
-        var product = await _productRepository.GetByIdStockQuantityAsync(id);
+        var product = await productRepository.GetByIdStockQuantityAsync(id);
+
         return product?.StockQuantity;
     }
 
     public async Task<bool> UpdateStockQuantityAsync(string id, int stockQuantity)
     {
-        var updateResult = await _productRepository.UpdateStockQuantityAsync(id, stockQuantity);
+        var updateResult = await productRepository.UpdateStockQuantityAsync(id, stockQuantity);
+
+        if (stockQuantity == 0)
+        {
+            await CheckStockAndPublishEventAsync(id);
+        }
+
         return updateResult.ModifiedCount > 0;
+    }
+
+    private async Task CheckStockAndPublishEventAsync(string productId)
+    {
+        var @event = new ProductOutOfStockEvent { ProductId = productId, };
+
+        await publishEndpoint.Publish(@event);
     }
 }

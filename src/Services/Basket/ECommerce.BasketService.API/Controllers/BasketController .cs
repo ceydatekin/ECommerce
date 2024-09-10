@@ -1,4 +1,5 @@
-﻿using ECommerce.BasketService.Core.Entities;
+﻿using ECommerce.BasketService.Core.DTOs;
+using ECommerce.BasketService.Core.Entities;
 using ECommerce.BasketService.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ public class BasketController : ControllerBase
     {
         _basketService = basketService;
     }
-
+    
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetCart(string userId)
     {
@@ -40,7 +41,7 @@ public class BasketController : ControllerBase
     }
 
     [HttpPost("{userId}/Items")]
-    public async Task<IActionResult> AddToBasket(string userId, [FromBody] BasketItem item)
+    public async Task<IActionResult> AddToBasket(string userId, [FromBody] AddBasketItemDto item)
     {
         var (success, message) = await _basketService.AddToBasketItemAsync(userId, item);
         if (success)

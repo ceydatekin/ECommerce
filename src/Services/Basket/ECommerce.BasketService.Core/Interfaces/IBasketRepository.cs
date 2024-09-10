@@ -13,4 +13,10 @@ public interface IBasketRepository
     Task RemoveFromBasketAsync(string userId, string productId);
 
     Task ClearBasketAsync(string userId);
+
+    Task SetBasketExpirationAsync(string userId, TimeSpan expirationTime);
+
+    Task<List<Basket>> GetAllBasketsAsync();
+
+    Task UpdateBasketAsync(Basket basket);
 }

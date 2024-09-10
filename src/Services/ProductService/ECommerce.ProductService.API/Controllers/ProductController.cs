@@ -1,4 +1,5 @@
-﻿using ECommerce.ProductService.Core.DTOs;
+﻿using ECommerce.ProductService.API.Services;
+using ECommerce.ProductService.Core.DTOs;
 using ECommerce.ProductService.Core.Entities;
 using ECommerce.ProductService.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -111,6 +112,7 @@ public class ProductsController(IProductService productService) : ControllerBase
 
         return Ok(stockQuantity);
     }
+
 
     [HttpPut("UpdateStock")]
     public async Task<IActionResult> UpdateStockQuantity([FromBody] UpdateStockQuantityDto updateDto)
